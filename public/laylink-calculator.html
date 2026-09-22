@@ -5,38 +5,136 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>LayLink Cumulative Margin Calculator</title>
 <style>
-:root{--bg:#f6f7f9;--card:#fff;--text:#172033;--muted:#667085;--border:#dfe3e8;--accent:#315efb}*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}.wrap{max-width:1260px;margin:28px auto;padding:0 20px 40px}h1{margin:0 0 7px;font-size:28px}.subtitle{color:var(--muted);margin-bottom:20px}.grid{display:grid;grid-template-columns:390px 1fr;gap:18px;align-items:start}.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 2px 8px rgba(16,24,40,.04)}h2{font-size:17px;margin:0 0 14px}h3{font-size:14px;margin:18px 0 9px;color:#344054}.row{display:grid;grid-template-columns:1fr 120px;gap:10px;align-items:center;margin:8px 0}label{font-size:13px;color:#344054}input{width:100%;border:1px solid #cfd5dd;border-radius:8px;padding:8px 9px;font-size:13px}.small{font-size:12px;color:var(--muted);line-height:1.45}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px 8px;border-bottom:1px solid var(--border);text-align:right}th:first-child,td:first-child{text-align:left}th{font-weight:600;background:#fafbfc}.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 4px}.metric{border:1px solid var(--border);border-radius:10px;padding:10px}.metric .k{font-size:11px;color:var(--muted);margin-bottom:5px}.metric .v{font-size:18px;font-weight:700}.legend{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 14px;font-size:12px;color:#475467}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}svg{width:100%;height:auto;display:block;background:#fff}.footer{margin-top:12px;font-size:11px;color:var(--muted)}.scenario-box{border:1px solid var(--border);border-radius:10px;padding:10px;margin:8px 0}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}@media(max-width:900px){.grid{grid-template-columns:1fr}.metric-grid{grid-template-columns:1fr 1fr}}
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --text:#172033; --muted:#667085;
+    --border:#dfe3e8; --accent:#315efb; --grid:#e7eaf0;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+  .wrap{max-width:1260px;margin:28px auto;padding:0 20px 40px}
+  h1{margin:0 0 7px;font-size:28px}
+  .subtitle{color:var(--muted);margin-bottom:20px}
+  .grid{display:grid;grid-template-columns:390px 1fr;gap:18px;align-items:start}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 2px 8px rgba(16,24,40,.04)}
+  h2{font-size:17px;margin:0 0 14px}
+  h3{font-size:14px;margin:18px 0 9px;color:#344054}
+  .row{display:grid;grid-template-columns:1fr 120px;gap:10px;align-items:center;margin:8px 0}
+  label{font-size:13px;color:#344054}
+  input{width:100%;border:1px solid #cfd5dd;border-radius:8px;padding:8px 9px;font-size:13px}
+  input:focus{outline:2px solid rgba(49,94,251,.18);border-color:var(--accent)}
+  .small{font-size:12px;color:var(--muted);line-height:1.45}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{padding:9px 8px;border-bottom:1px solid var(--border);text-align:right}
+  th:first-child,td:first-child{text-align:left}
+  th{font-weight:600;background:#fafbfc}
+  .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0 4px}
+  .metric{border:1px solid var(--border);border-radius:10px;padding:10px}
+  .metric .k{font-size:11px;color:var(--muted);margin-bottom:5px}
+  .metric .v{font-size:18px;font-weight:700}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 14px;font-size:12px;color:#475467}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+  svg{width:100%;height:auto;display:block;background:#fff}
+  .footer{margin-top:12px;font-size:11px;color:var(--muted)}
+  .scenario-box{border:1px solid var(--border);border-radius:10px;padding:10px;margin:8px 0}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}.metric-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
-<body><div class="wrap"><h1>LayLink cumulative margin calculator</h1><div class="subtitle">Compare conventional stringer soldering with three LayLink cost scenarios.</div><div class="grid"><div class="card"><h2>Factory assumptions</h2>
-<div class="row"><label>Factory throughput (modules/hour)</label><input id="throughput" type="number" step="1" value="25"></div>
-<div class="row"><label>Operating days / year</label><input id="daysPerYear" type="number" step="1" value="250"></div>
-<div class="row"><label>Hours / shift</label><input id="hoursPerShift" type="number" step="0.5" value="8"></div>
-<div class="row"><label>Utilization (%)</label><input id="utilization" type="number" step="1" value="80"></div>
-<div class="row"><label>Electricity price (€/kWh)</label><input id="electricityPrice" type="number" step="0.01" value="0.20"></div>
-<div class="row"><label>Flux price (€/L)</label><input id="fluxPrice" type="number" step="0.5" value="10"></div>
-<div class="row"><label>Module area (m²/module)</label><input id="moduleArea" type="number" step="0.1" value="1.5"></div>
-<div class="row"><label>Power density (W/m²)</label><input id="powerDensity" type="number" step="1" value="240"></div>
-<div class="row"><label>Gross margin before interconnection cost (€/module)</label><input id="grossMargin" type="number" step="0.1" value="15"></div>
-<div class="row"><label>Labor salary (€/person/year)</label><input id="salary" type="number" step="1000" value="55000"></div>
-<div class="row"><label>Shifts/day</label><input id="shifts" type="number" step="1" value="2"></div>
-<div class="row"><label>Analysis period (years)</label><input id="years" type="number" step="1" min="1" max="20" value="7"></div>
-<div class="row"><label>Corporate tax rate (%)</label><input id="taxRate" type="number" step="1" min="0" max="100" value="30"></div>
-<div class="row"><label>Depreciation period (years)</label><input id="deprYears" type="number" step="1" min="1" max="30" value="7"></div>
-<h3>Scenario 0 — Stringer soldering</h3><div class="scenario-box"><div class="row"><label>CAPEX (€)</label><input id="capex0" type="number" step="10000" value="500000"></div><div class="row"><label>Workers / shift</label><input id="labor0" type="number" step="0.5" value="2"></div><div class="row"><label>Power consumption (kW)</label><input id="power0" type="number" step="0.1" value="8"></div><div class="row"><label>Flux consumption (mL/module)</label><input id="flux0" type="number" step="0.5" value="8"></div></div>
-<h3>Scenario 1 — LayLink current</h3><div class="scenario-box"><div class="row"><label>CAPEX (€)</label><input id="capex1" type="number" step="10000" value="50000"></div><div class="row"><label>Workers / shift</label><input id="labor1" type="number" step="0.5" value="0"></div><div class="row"><label>Power consumption (kW)</label><input id="power1" type="number" step="0.1" value="0.5"></div><div class="two"><div><label>Extra material (€/m²)</label><input id="mat1" type="number" step="0.05" value="2.5"></div><div><label>ECT area (m²/module)</label><input id="area1" type="number" step="0.1" value="1.5"></div></div></div>
-<h3>Scenario 2 — LayLink target</h3><div class="scenario-box"><div class="row"><label>CAPEX (€)</label><input id="capex2" type="number" step="10000" value="50000"></div><div class="row"><label>Workers / shift</label><input id="labor2" type="number" step="0.5" value="0"></div><div class="row"><label>Power consumption (kW)</label><input id="power2" type="number" step="0.1" value="0.5"></div><div class="two"><div><label>Extra material (€/m²)</label><input id="mat2" type="number" step="0.05" value="1.5"></div><div><label>ECT area (m²/module)</label><input id="area2" type="number" step="0.1" value="1.5"></div></div></div>
-<h3>Scenario 3 — LayLink optimized</h3><div class="scenario-box"><div class="row"><label>CAPEX (€)</label><input id="capex3" type="number" step="10000" value="50000"></div><div class="row"><label>Workers / shift</label><input id="labor3" type="number" step="0.5" value="0"></div><div class="row"><label>Power consumption (kW)</label><input id="power3" type="number" step="0.1" value="0.5"></div><div class="two"><div><label>Extra material (€/m²)</label><input id="mat3" type="number" step="0.05" value="0.9"></div><div><label>ECT area (m²/module)</label><input id="area3" type="number" step="0.1" value="0.5"></div></div></div>
-<p class="small">Pre-tax cumulative margin = −CAPEX + cumulative operating profit. After-tax cumulative cash flow = −CAPEX + cumulative [operating profit − tax], where tax is based on taxable profit after straight-line depreciation. Electricity scales with operating hours and flux is used only by the stringer scenario.</p></div>
-<div><div class="card"><h2>Calculated production</h2><div class="metric-grid"><div class="metric"><div class="k">Module power</div><div class="v" id="mPower">—</div></div><div class="metric"><div class="k">Modules / year</div><div class="v" id="mCount">—</div></div><div class="metric"><div class="k">Operating hours / year</div><div class="v" id="mHours">—</div></div><div class="metric"><div class="k">Capacity</div><div class="v" id="mMW">—</div></div></div></div>
-<div class="card" style="margin-top:18px"><h2>Pre-tax cumulative margin</h2><div id="visibilityControls" class="legend" style="margin-bottom:12px"></div><svg id="chart" viewBox="0 0 820 450"></svg></div>
-<div class="card" style="margin-top:18px"><h2>After-tax cumulative cash flow</h2><div class="small" style="margin-bottom:10px">Taxable profit = operating profit − straight-line depreciation. Tax is applied only when taxable profit is positive.</div><svg id="afterTaxChart" viewBox="0 0 820 450"></svg></div>
-<div class="card" style="margin-top:18px"><h2>Scenario summary</h2><div style="overflow:auto"><table id="summary"><thead><tr><th>Scenario</th><th>Material €/module</th><th>Labor €/year</th><th>Energy €/year</th><th>Flux €/year</th><th>Pre-tax op. profit €/year</th><th>Pre-tax BE</th><th>After-tax BE</th><th>Pre-tax at end</th><th>After-tax at end</th></tr></thead><tbody></tbody></table></div><div class="footer">Pre-tax break-even is when pre-tax cumulative margin reaches €0. After-tax break-even is when cumulative after-tax cash flow reaches €0.</div></div>
-<div class="card" style="margin-top:18px"><h2>Cumulative margin by year</h2><div style="overflow:auto"><table id="yearTable"></table></div></div></div></div></div>
+<body>
+<div class="wrap">
+  <h1>LayLink cumulative margin calculator</h1>
+  <div class="subtitle">Compare conventional stringer soldering with three LayLink cost scenarios.</div>
+  <div class="grid">
+    <div class="card">
+      <h2>Factory assumptions</h2>
+      <div class="row"><label>Factory throughput (modules/hour)</label><input id="throughput" type="number" step="1" value="25"></div>
+      <div class="row"><label>Operating days / year</label><input id="daysPerYear" type="number" step="1" value="250"></div>
+      <div class="row"><label>Hours / shift</label><input id="hoursPerShift" type="number" step="0.5" value="8"></div>
+      <div class="row"><label>Utilization (%)</label><input id="utilization" type="number" step="1" value="80"></div>
+      <div class="row"><label>Electricity price (€/kWh)</label><input id="electricityPrice" type="number" step="0.01" value="0.20"></div>
+      <div class="row"><label>Flux price (€/L)</label><input id="fluxPrice" type="number" step="0.5" value="10"></div>
+      <div class="row"><label>Module area (m²/module)</label><input id="moduleArea" type="number" step="0.1" value="1.5"></div>
+      <div class="row"><label>Power density (W/m²)</label><input id="powerDensity" type="number" step="1" value="240"></div>
+      <div class="row"><label>Gross margin before interconnection cost (€/module)</label><input id="grossMargin" type="number" step="0.1" value="15"></div>
+      <div class="row"><label>Labor salary (€/person/year)</label><input id="salary" type="number" step="1000" value="55000"></div>
+      <div class="row"><label>Shifts/day</label><input id="shifts" type="number" step="1" value="2"></div>
+      <div class="row"><label>Analysis period (years)</label><input id="years" type="number" step="1" min="1" max="20" value="7"></div>
+      <div class="row"><label>Corporate tax rate (%)</label><input id="taxRate" type="number" step="1" min="0" max="100" value="30"></div>
+      <div class="row"><label>Depreciation period (years)</label><input id="deprYears" type="number" step="1" min="1" max="30" value="7"></div>
+      <h3>Scenario 0 — Stringer soldering</h3>
+      <div class="scenario-box"><div class="row"><label>CAPEX (€)</label><input id="capex0" type="number" step="10000" value="500000"></div><div class="row"><label>Workers / shift</label><input id="labor0" type="number" step="0.5" value="2"></div><div class="row"><label>Power consumption (kW)</label><input id="power0" type="number" step="0.1" value="8"></div><div class="row"><label>Flux consumption (mL/module)</label><input id="flux0" type="number" step="0.5" value="8"></div></div>
+      <h3>Scenario 1 — LayLink current</h3>
+      <div class="scenario-box"><div class="row"><label>CAPEX (€)</label><input id="capex1" type="number" step="10000" value="50000"></div><div class="row"><label>Workers / shift</label><input id="labor1" type="number" step="0.5" value="0"></div><div class="row"><label>Power consumption (kW)</label><input id="power1" type="number" step="0.1" value="0.5"></div><div class="two"><div><label>Extra material (€/m²)</label><input id="mat1" type="number" step="0.05" value="2.5"></div><div><label>ECT area (m²/module)</label><input id="area1" type="number" step="0.1" value="1.5"></div></div></div>
+      <h3>Scenario 2 — LayLink target</h3>
+      <div class="scenario-box"><div class="row"><label>CAPEX (€)</label><input id="capex2" type="number" step="10000" value="50000"></div><div class="row"><label>Workers / shift</label><input id="labor2" type="number" step="0.5" value="0"></div><div class="row"><label>Power consumption (kW)</label><input id="power2" type="number" step="0.1" value="0.5"></div><div class="two"><div><label>Extra material (€/m²)</label><input id="mat2" type="number" step="0.05" value="1.5"></div><div><label>ECT area (m²/module)</label><input id="area2" type="number" step="0.1" value="1.5"></div></div></div>
+      <h3>Scenario 3 — LayLink optimized</h3>
+      <div class="scenario-box"><div class="row"><label>CAPEX (€)</label><input id="capex3" type="number" step="10000" value="50000"></div><div class="row"><label>Workers / shift</label><input id="labor3" type="number" step="0.5" value="0"></div><div class="row"><label>Power consumption (kW)</label><input id="power3" type="number" step="0.1" value="0.5"></div><div class="two"><div><label>Extra material (€/m²)</label><input id="mat3" type="number" step="0.05" value="0.9"></div><div><label>ECT area (m²/module)</label><input id="area3" type="number" step="0.1" value="0.5"></div></div></div>
+      <p class="small">Pre-tax cumulative margin = −CAPEX + cumulative operating profit. After-tax cumulative cash flow = −CAPEX + cumulative [operating profit − tax]. Taxable profit is reduced by straight-line depreciation of CAPEX over the selected depreciation period. Electricity scales with operating hours and flux is used only by the stringer scenario.</p>
+    </div>
+    <div>
+      <div class="card"><h2>Calculated production</h2><div class="metric-grid"><div class="metric"><div class="k">Module power</div><div class="v" id="mPower">—</div></div><div class="metric"><div class="k">Modules / year</div><div class="v" id="mCount">—</div></div><div class="metric"><div class="k">Operating hours / year</div><div class="v" id="mHours">—</div></div><div class="metric"><div class="k">Capacity</div><div class="v" id="mMW">—</div></div></div></div>
+      <div class="card" style="margin-top:18px"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h2 id="chartTitle" style="margin:0">Pre-tax cumulative margin</h2><div style="display:flex;gap:8px"><button id="preTaxBtn" type="button" style="padding:7px 12px;border:1px solid #cfd5dd;border-radius:8px;background:#172033;color:#fff;cursor:pointer">Pre-tax</button><button id="afterTaxBtn" type="button" style="padding:7px 12px;border:1px solid #cfd5dd;border-radius:8px;background:#fff;color:#172033;cursor:pointer">After-tax</button></div></div><div id="taxNote" class="small" style="margin:10px 0 8px">Pre-tax view shows cumulative operating margin after CAPEX, labor, materials, electricity and flux.</div><div id="visibilityControls" class="legend" style="margin-bottom:12px"></div><svg id="chart" viewBox="0 0 820 450" role="img" aria-label="Cumulative financial chart"></svg></div>
+      <div class="card" style="margin-top:18px"><h2>Scenario summary</h2><div style="overflow:auto"><table id="summary"><thead><tr><th>Scenario</th><th>Material €/module</th><th>Labor €/year</th><th>Energy €/year</th><th>Flux €/year</th><th>Pre-tax op. profit €/year</th><th>Pre-tax BE</th><th>After-tax BE</th><th>Pre-tax at end</th><th>After-tax at end</th></tr></thead><tbody></tbody></table></div><div class="footer">Pre-tax break-even is when pre-tax cumulative margin reaches €0. After-tax break-even is when cumulative after-tax cash flow reaches €0.</div></div>
+      <div class="card" style="margin-top:18px"><h2>Cumulative margin by year</h2><div style="overflow:auto"><table id="yearTable"></table></div></div>
+    </div>
+  </div>
+</div>
 <script>
-const $=id=>document.getElementById(id),colors=["#475467","#315efb","#12a594","#e08700"],names=["S0 Stringer","S1 LayLink current","S2 LayLink target","S3 LayLink optimized"],visible=[true,true,true,true];document.querySelectorAll("input").forEach(el=>el.addEventListener("input",update));
-function num(id){return Number($(id).value||0)}function euro(v){const a=Math.abs(v);if(a>=1e6)return"€"+(v/1e6).toFixed(2)+"M";if(a>=1000)return"€"+Math.round(v/1000)+"k";return"€"+v.toFixed(0)}function comma(v){return Math.round(v).toLocaleString("en-US")}
-function calculate(){const throughput=num("throughput"),days=num("daysPerYear"),hps=num("hoursPerShift"),util=num("utilization")/100,ep=num("electricityPrice"),fp=num("fluxPrice"),ma=num("moduleArea"),pd=num("powerDensity"),gm=num("grossMargin"),salary=num("salary"),shifts=num("shifts"),years=Math.max(1,Math.round(num("years"))),taxRate=Math.max(0,Math.min(100,num("taxRate")))/100,deprYears=Math.max(1,Math.round(num("deprYears"))),modulePowerW=ma*pd,operatingHours=days*shifts*hps*util,modulesPerYear=throughput*operatingHours,capacityMW=modulesPerYear*modulePowerW/1e6,scenarios=[];for(let i=0;i<4;i++){const capex=num("capex"+i),labor=num("labor"+i)*shifts*salary,materialPerModule=i===0?0:num("mat"+i)*num("area"+i),materialAnnual=materialPerModule*modulesPerYear,powerKW=num("power"+i),electricityAnnual=powerKW*operatingHours*ep,fluxMl=i===0?num("flux0"):0,fluxAnnualCost=modulesPerYear*fluxMl/1000*fp,grossAnnual=gm*modulesPerYear,netAnnual=grossAnnual-labor-materialAnnual-electricityAnnual-fluxAnnualCost,depreciationAnnual=capex/deprYears,margins=[-capex],afterTaxCash=[-capex];let cumPre=-capex,cumAfter=-capex,afterTaxBE=null;for(let y=1;y<=years;y++){cumPre+=netAnnual;margins.push(cumPre);const depreciation=y<=deprYears?depreciationAnnual:0,taxableProfit=netAnnual-depreciation,tax=Math.max(0,taxableProfit*taxRate),annualAfterTaxCF=netAnnual-tax;cumAfter+=annualAfterTaxCF;afterTaxCash.push(cumAfter);if(afterTaxBE===null&&cumAfter>=0){const prev=afterTaxCash[y-1],delta=cumAfter-prev;afterTaxBE=(y-1)+(-prev/delta)}}const payback=netAnnual>0?capex/netAnnual:null;scenarios.push({capex,labor,materialPerModule,electricityAnnual,fluxAnnualCost,netAnnual,margins,afterTaxCash,payback,afterTaxBE})}return{capacityMW,years,modulePowerW,modulesPerYear,operatingHours,scenarios}}
-function drawChart(d,svgId,key,yLabel){const svg=$(svgId),W=820,H=450,L=78,R=24,T=24,B=62,pw=W-L-R,ph=H-T-B;let vals=[];d.scenarios.forEach((s,i)=>{if(visible[i])vals.push(...s[key])});if(!vals.length)vals=[0,1];let min=Math.min(0,...vals),max=Math.max(0,...vals),pad=(max-min)*.08||1;min-=pad;max+=pad;const x=t=>L+t/d.years*pw,yy=v=>T+(max-v)/(max-min)*ph;let out="";for(let i=0;i<=5;i++){const v=min+(max-min)*i/5,py=yy(v);out+=`<line x1="${L}" y1="${py}" x2="${W-R}" y2="${py}" stroke="#e7eaf0"/><text x="${L-10}" y="${py+4}" text-anchor="end" font-size="11" fill="#667085">${euro(v)}</text>`}out+=`<line x1="${L}" y1="${T}" x2="${L}" y2="${H-B}" stroke="#98a2b3"/><line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" stroke="#98a2b3"/>`;if(min<0&&max>0)out+=`<line x1="${L}" y1="${yy(0)}" x2="${W-R}" y2="${yy(0)}" stroke="#98a2b3" stroke-dasharray="5 4"/>`;for(let y=0;y<=d.years;y++)out+=`<text x="${x(y)}" y="${H-B+22}" text-anchor="middle" font-size="11" fill="#667085">${y}</text>`;out+=`<text x="${L+pw/2}" y="${H-14}" text-anchor="middle" font-size="12" fill="#475467">Years</text><text x="18" y="${T+ph/2}" transform="rotate(-90 18 ${T+ph/2})" text-anchor="middle" font-size="12" fill="#475467">${yLabel}</text>`;d.scenarios.forEach((s,i)=>{if(!visible[i])return;const series=s[key],pts=series.map((v,y)=>`${x(y)},${yy(v)}`).join(" ");out+=`<polyline fill="none" stroke="${colors[i]}" stroke-width="3" points="${pts}"/>`;series.forEach((v,y)=>out+=`<circle cx="${x(y)}" cy="${yy(v)}" r="3.2" fill="${colors[i]}"/>`)});svg.innerHTML=out}
-function update(){const d=calculate();$("mPower").textContent=d.modulePowerW.toFixed(0)+" W";$("mCount").textContent=comma(d.modulesPerYear);$("mHours").textContent=comma(d.operatingHours)+" h";$("mMW").textContent=d.capacityMW.toFixed(2)+" MW/y";const fmt=v=>v===null?"No BE":v<1?(v*12).toFixed(1)+" mo":v.toFixed(2)+" y";$("visibilityControls").innerHTML=names.map((n,i)=>`<label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" ${visible[i]?"checked":""} data-scenario="${i}" style="width:auto"><span class="dot" style="background:${colors[i]}"></span><span>${n}</span><strong style="color:${colors[i]};font-size:12px">${visible[i]?"Pre-tax BE: "+fmt(d.scenarios[i].payback)+" | After-tax BE: "+fmt(d.scenarios[i].afterTaxBE):""}</strong></label>`).join("");document.querySelectorAll("#visibilityControls input[type=checkbox]").forEach(cb=>cb.addEventListener("change",e=>{visible[Number(e.target.dataset.scenario)]=e.target.checked;update()}));$("summary").querySelector("tbody").innerHTML=d.scenarios.map((s,i)=>`<tr><td>${names[i]}</td><td>${euro(s.materialPerModule)}</td><td>${euro(s.labor)}</td><td>${euro(s.electricityAnnual)}</td><td>${euro(s.fluxAnnualCost)}</td><td><b>${euro(s.netAnnual)}</b></td><td>${fmt(s.payback)}</td><td>${fmt(s.afterTaxBE)}</td><td><b>${euro(s.margins[d.years])}</b></td><td><b>${euro(s.afterTaxCash[d.years])}</b></td></tr>`).join("");let yhtml="<thead><tr><th>Year</th>"+names.map(n=>`<th>${n} pre-tax</th><th>${n} after-tax</th>`).join("")+"</tr></thead><tbody>";for(let y=0;y<=d.years;y++)yhtml+=`<tr><td>${y}</td>`+d.scenarios.map(s=>`<td>${euro(s.margins[y])}</td><td>${euro(s.afterTaxCash[y])}</td>`).join("")+"</tr>";yhtml+="</tbody>";$("yearTable").innerHTML=yhtml;drawChart(d,"chart","margins","Pre-tax cumulative margin");drawChart(d,"afterTaxChart","afterTaxCash","After-tax cumulative cash flow")}update();
-</script></body></html>
+const $ = id => document.getElementById(id);
+const colors = ["#475467","#315efb","#12a594","#e08700"];
+const names = ["S0 Stringer","S1 LayLink current","S2 LayLink target","S3 LayLink optimized"];
+const visible = [true,true,true,true];
+let chartMode = "pre";
+document.querySelectorAll("input").forEach(el => el.addEventListener("input", update));
+function num(id){ return Number($(id).value || 0); }
+function euro(v){ const a=Math.abs(v); if(a>=1e6) return "€"+(v/1e6).toFixed(2)+"M"; if(a>=1000) return "€"+Math.round(v/1000)+"k"; return "€"+v.toFixed(0); }
+function comma(v){ return Math.round(v).toLocaleString("en-US"); }
+function calculate(){
+  const throughput=num("throughput"),daysPerYear=num("daysPerYear"),hoursPerShift=num("hoursPerShift"),utilization=num("utilization")/100,electricityPrice=num("electricityPrice"),fluxPrice=num("fluxPrice"),moduleArea=num("moduleArea"),powerDensity=num("powerDensity"),grossMargin=num("grossMargin"),salary=num("salary"),shifts=num("shifts"),years=Math.max(1,Math.round(num("years"))),taxRate=Math.max(0,Math.min(100,num("taxRate")))/100,deprYears=Math.max(1,Math.round(num("deprYears")));
+  const modulePowerW=moduleArea*powerDensity,operatingHours=daysPerYear*shifts*hoursPerShift*utilization,modulesPerYear=throughput*operatingHours,capacityMW=modulesPerYear*modulePowerW/1e6;
+  const scenarios=[];
+  for(let i=0;i<4;i++){
+    const capex=num("capex"+i),workers=num("labor"+i),labor=workers*shifts*salary,materialPerModule=i===0?0:num("mat"+i)*num("area"+i),materialAnnual=materialPerModule*modulesPerYear,powerKW=num("power"+i),electricityAnnual=powerKW*operatingHours*electricityPrice,fluxMlPerModule=i===0?num("flux0"):0,fluxAnnualCost=modulesPerYear*fluxMlPerModule/1000*fluxPrice,grossAnnual=grossMargin*modulesPerYear,netAnnual=grossAnnual-labor-materialAnnual-electricityAnnual-fluxAnnualCost,depreciationAnnual=capex/deprYears;
+    const margins=[-capex],afterTaxCash=[-capex]; let cumPre=-capex,cumAfter=-capex,afterTaxBE=null;
+    for(let y=1;y<=years;y++){
+      cumPre += netAnnual; margins.push(cumPre);
+      const depreciation=y<=deprYears?depreciationAnnual:0,taxableProfit=netAnnual-depreciation,tax=Math.max(0,taxableProfit*taxRate),annualAfterTaxCF=netAnnual-tax;
+      cumAfter += annualAfterTaxCF; afterTaxCash.push(cumAfter);
+      if(afterTaxBE===null && cumAfter>=0){ const prev=afterTaxCash[y-1],delta=cumAfter-prev; afterTaxBE=(y-1)+((-prev)/delta); }
+    }
+    const payback=netAnnual>0?capex/netAnnual:null;
+    scenarios.push({capex,labor,materialPerModule,electricityAnnual,fluxAnnualCost,netAnnual,margins,afterTaxCash,payback,afterTaxBE});
+  }
+  return {capacityMW,years,modulePowerW,modulesPerYear,operatingHours,scenarios};
+}
+function drawChart(d,svgId,seriesKey,yLabel){
+  const svg=$(svgId),W=820,H=450,L=78,R=24,T=24,B=62,pw=W-L-R,ph=H-T-B; let vals=[];
+  d.scenarios.forEach((s,idx)=>{ if(visible[idx]) vals.push(...s[seriesKey]); }); if(vals.length===0) vals=[0,1];
+  let min=Math.min(0,...vals),max=Math.max(0,...vals),pad=(max-min)*0.08||1; min-=pad;max+=pad;
+  const x=t=>L+(t/d.years)*pw,yy=v=>T+(max-v)/(max-min)*ph; let out="";
+  for(let i=0;i<=5;i++){ const v=min+(max-min)*i/5,py=yy(v); out+=`<line x1="${L}" y1="${py}" x2="${W-R}" y2="${py}" stroke="#e7eaf0" stroke-width="1"/>`; out+=`<text x="${L-10}" y="${py+4}" text-anchor="end" font-size="11" fill="#667085">${euro(v)}</text>`; }
+  out+=`<line x1="${L}" y1="${T}" x2="${L}" y2="${H-B}" stroke="#98a2b3"/>`;
+  out+=`<line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" stroke="#98a2b3"/>`;
+  if(min<0&&max>0) out+=`<line x1="${L}" y1="${yy(0)}" x2="${W-R}" y2="${yy(0)}" stroke="#98a2b3" stroke-dasharray="5 4"/>`;
+  for(let y=0;y<=d.years;y++){ const px=x(y); out+=`<text x="${px}" y="${H-B+22}" text-anchor="middle" font-size="11" fill="#667085">${y}</text>`; }
+  out+=`<text x="${L+pw/2}" y="${H-14}" text-anchor="middle" font-size="12" fill="#475467">Years</text>`;
+  out+=`<text x="18" y="${T+ph/2}" transform="rotate(-90 18 ${T+ph/2})" text-anchor="middle" font-size="12" fill="#475467">${yLabel}</text>`;
+  d.scenarios.forEach((s,idx)=>{ if(!visible[idx]) return; const series=s[seriesKey],pts=series.map((v,y)=>`${x(y)},${yy(v)}`).join(" "); out+=`<polyline fill="none" stroke="${colors[idx]}" stroke-width="3" points="${pts}"/>`; series.forEach((v,y)=>out+=`<circle cx="${x(y)}" cy="${yy(v)}" r="3.2" fill="${colors[idx]}"/>`); });
+  svg.innerHTML=out;
+}
+function update(){
+  const d=calculate(); $("mPower").textContent=d.modulePowerW.toFixed(0)+" W"; $("mCount").textContent=comma(d.modulesPerYear); $("mHours").textContent=comma(d.operatingHours)+" h"; $("mMW").textContent=d.capacityMW.toFixed(2)+" MW/y";
+  const fmtBE=v=>v===null?"No BE":(v<1?(v*12).toFixed(1)+" mo":v.toFixed(2)+" y");
+  $("visibilityControls").innerHTML=names.map((n,i)=>{ const s=d.scenarios[i]; return `<label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" ${visible[i]?"checked":""} data-scenario="${i}" style="width:auto"><span class="dot" style="background:${colors[i]}"></span><span>${n}</span><strong style="color:${colors[i]};font-size:12px">${visible[i]?"BE: "+fmtBE(chartMode==="pre"?s.payback:s.afterTaxBE):""}</strong></label>`; }).join("");
+  document.querySelectorAll("#visibilityControls input[type=checkbox]").forEach(cb=>cb.addEventListener("change",e=>{ visible[Number(e.target.dataset.scenario)]=e.target.checked; update(); }));
+  $("summary").querySelector("tbody").innerHTML=d.scenarios.map((s,i)=>`<tr><td>${names[i]}</td><td>${euro(s.materialPerModule)}</td><td>${euro(s.labor)}</td><td>${euro(s.electricityAnnual)}</td><td>${euro(s.fluxAnnualCost)}</td><td><b>${euro(s.netAnnual)}</b></td><td>${fmtBE(s.payback)}</td><td>${fmtBE(s.afterTaxBE)}</td><td><b>${euro(s.margins[d.years])}</b></td><td><b>${euro(s.afterTaxCash[d.years])}</b></td></tr>`).join("");
+  let yhtml="<thead><tr><th>Year</th>"+names.map(n=>`<th>${n} pre-tax</th><th>${n} after-tax</th>`).join("")+"</tr></thead><tbody>"; for(let y=0;y<=d.years;y++) yhtml+=`<tr><td>${y}</td>`+d.scenarios.map(s=>`<td>${euro(s.margins[y])}</td><td>${euro(s.afterTaxCash[y])}</td>`).join("")+"</tr>"; yhtml+="</tbody>"; $("yearTable").innerHTML=yhtml;
+  if(chartMode==="pre"){ $("chartTitle").textContent="Pre-tax cumulative margin"; $("taxNote").textContent="Pre-tax view shows cumulative operating margin after CAPEX, labor, materials, electricity and flux."; drawChart(d,"chart","margins","Pre-tax cumulative margin"); }
+  else { $("chartTitle").textContent="After-tax cumulative cash flow"; $("taxNote").textContent="After-tax view deducts corporate tax from operating profit. Taxable profit is reduced by straight-line depreciation of the machine CAPEX over the selected depreciation period."; drawChart(d,"chart","afterTaxCash","After-tax cumulative cash flow"); }
+}
+$("preTaxBtn").addEventListener("click",()=>{ chartMode="pre"; $("preTaxBtn").style.background="#172033"; $("preTaxBtn").style.color="#fff"; $("afterTaxBtn").style.background="#fff"; $("afterTaxBtn").style.color="#172033"; update(); });
+$("afterTaxBtn").addEventListener("click",()=>{ chartMode="after"; $("afterTaxBtn").style.background="#172033"; $("afterTaxBtn").style.color="#fff"; $("preTaxBtn").style.background="#fff"; $("preTaxBtn").style.color="#172033"; update(); });
+update();
+</script>
+</body>
+</html>
