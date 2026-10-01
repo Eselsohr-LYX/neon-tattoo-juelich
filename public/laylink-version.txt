@@ -1,0 +1,3 @@
+LayLink calculator v9
+Updated: 2026-10-01
+Includes synchronized cells/hour and modules/hour inputs for 182 x 92 mm, 25.5% efficient cells.
